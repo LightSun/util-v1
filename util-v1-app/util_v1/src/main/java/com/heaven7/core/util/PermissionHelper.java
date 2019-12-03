@@ -69,6 +69,7 @@ public class PermissionHelper {
         }
         this.mParams = params;
         this.mCallback = callback;
+        this.mCheckingIndex = 0;
         requestPermissionImpl();
     }
 
@@ -201,7 +202,6 @@ public class PermissionHelper {
         /**
          * @param requestPermission the permission to request
          * @param requestCode       the request code
-         * @see #PermissionParam(String, int, ExceptionVerifier, Object[])
          */
         public PermissionParam(String requestPermission, int requestCode) {
             this(requestPermission, requestCode, null);
