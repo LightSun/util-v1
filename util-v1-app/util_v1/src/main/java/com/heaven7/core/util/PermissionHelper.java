@@ -39,7 +39,7 @@ public class PermissionHelper {
         void onRequestPermissionResult(String requestPermission, int requestCode, boolean success);
 
         /**
-         * callback on permission had been refused.
+         * callback on permission had been refused before.
          *
          * @param requestCode       the request code
          * @param requestPermission the request permission
