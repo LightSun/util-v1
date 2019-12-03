@@ -37,6 +37,17 @@ public class PermissionHelper {
          * @param success           if success to request the permission group.
          */
         void onRequestPermissionResult(String requestPermission, int requestCode, boolean success);
+
+        /**
+         * callback on permission had been refused.
+         *
+         * @param requestCode       the request code
+         * @param requestPermission the request permission
+         * @param task              the task to run when you want to request permission again. this task often be called on user click confirm.
+         * @return true if handled success. when return true the permission chain will be broken until you run the task.
+         * @since 1.1.5
+         */
+        boolean handlePermissionHadRefused(String requestPermission, int requestCode, Runnable task);
     }
 
     public PermissionHelper(Activity activity) {
@@ -137,7 +148,7 @@ public class PermissionHelper {
         }
     }
 
-    private void reset(){
+    private void reset() {
         mCheckingIndex = 0;
         mParams = null;
         mCallback = null;
@@ -150,10 +161,22 @@ public class PermissionHelper {
      * @param permissions  the permissions
      * @param grantResults the grant result
      */
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(mParams != null) {
+    public void onRequestPermissionsResult(final int requestCode, final String[] permissions, int[] grantResults) {
+        if (mParams != null) {
             final PermissionParam permissionParam = mParams[mCheckingIndex];
             if (permissionParam.requestCode == requestCode) {
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    //have refuse then
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permissionParam.requestPermission)
+                            && mCallback.handlePermissionHadRefused(permissionParam.requestPermission, requestCode, new Runnable() {
+                        @Override
+                        public void run() {
+                            ActivityCompat.requestPermissions(mActivity, permissions, requestCode);
+                        }
+                    })) {
+                        return;
+                    }
+                }
                 checkNext(permissionParam, grantResults[0] == PackageManager.PERMISSION_GRANTED);
             }
         }
