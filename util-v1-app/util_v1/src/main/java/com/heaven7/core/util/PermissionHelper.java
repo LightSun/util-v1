@@ -149,7 +149,7 @@ public class PermissionHelper {
         }
     }
 
-    private void reset() {
+    public void reset() {
         mCheckingIndex = 0;
         mParams = null;
         mCallback = null;
@@ -168,7 +168,7 @@ public class PermissionHelper {
             if (permissionParam.requestCode == requestCode) {
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     //have refuse then
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permissionParam.requestPermission)
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permissionParam.requestPermission)
                             && mCallback.handlePermissionHadRefused(permissionParam.requestPermission, requestCode, new Runnable() {
                         @Override
                         public void run() {
