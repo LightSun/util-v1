@@ -24,6 +24,8 @@ public class PermissionHelper {
      */
     private int mCheckingIndex;
 
+    private boolean parallel;
+
     /**
      * the permission callback
      */
@@ -55,6 +57,13 @@ public class PermissionHelper {
             throw new NullPointerException();
         }
         this.mActivity = activity;
+    }
+
+    public boolean isParallel() {
+        return parallel;
+    }
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
     }
 
     /**
@@ -175,6 +184,12 @@ public class PermissionHelper {
                             ActivityCompat.requestPermissions(mActivity, permissions, requestCode);
                         }
                     })) {
+                        return;
+                    }
+                    //for parallel . just callback and mark success.
+                    if(parallel){
+                        mCallback.onRequestPermissionResult(permissionParam.requestPermission, requestCode, false);
+                        checkNext(permissionParam, true);
                         return;
                     }
                 }
