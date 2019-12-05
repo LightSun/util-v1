@@ -189,7 +189,11 @@ public class PermissionHelper {
                     //for parallel . just callback and mark success.
                     if(parallel){
                         mCallback.onRequestPermissionResult(permissionParam.requestPermission, requestCode, false);
-                        checkNext(permissionParam, true);
+                        if (mParams.length - 1 > mCheckingIndex) {
+                            //request next
+                            mCheckingIndex += 1;
+                            requestPermissionImpl();
+                        }
                         return;
                     }
                 }
