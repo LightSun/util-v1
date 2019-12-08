@@ -193,6 +193,8 @@ public class PermissionHelper {
                             //request next
                             mCheckingIndex += 1;
                             requestPermissionImpl();
+                        }else {
+                            reset();
                         }
                         return;
                     }
