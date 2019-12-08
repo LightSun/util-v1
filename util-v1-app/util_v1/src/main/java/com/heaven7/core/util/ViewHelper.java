@@ -42,7 +42,7 @@ public class ViewHelper {
 
 	private final SparseArray<View> mViewMap;
 	private final View mRootView;
-	private LayoutInflater mInflater;
+	private final LayoutInflater mInflater;
 	protected final ViewHelperImpl mImpl;
 	/**
 	 * the loader to load image
@@ -52,13 +52,18 @@ public class ViewHelper {
 
 		  void load(String url, ImageView iv);
 	}
+	protected ViewHelper(){
+		this.mRootView = null;
+		mInflater = null;
+		mViewMap = null;
+		mImpl = onCreateViewHelper();
+	}
 	public ViewHelper(View root) {
 		this.mRootView = root;
 		mInflater = LayoutInflater.from(root.getContext());
 		mViewMap = new SparseArray<View>();
 		mImpl = onCreateViewHelper();
 	}
-
 	protected ViewHelperImpl onCreateViewHelper(){
 		return new ViewHelperImpl(null);
 	}

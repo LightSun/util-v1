@@ -39,8 +39,10 @@ public abstract class AsyncManager{
         return mPrepared;
     }
     public void quit(){
-        mPrepared = false;
-        mLooper.quit();
+        if(isPrepared()){
+            mPrepared = false;
+            mLooper.quit();
+        }
     }
 
     /**

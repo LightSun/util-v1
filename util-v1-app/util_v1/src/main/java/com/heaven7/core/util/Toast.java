@@ -19,7 +19,7 @@ import android.view.WindowManager;
 
 public final class Toast {
 
-    private static final int TOAST_SHOW_LENGTH = 2000; //toast展示的时间
+    private static final int TOAST_SHOW_LENGTH = 2000;
 
     private final WindowManager mWM;
     private final WindowManager.LayoutParams mParams;

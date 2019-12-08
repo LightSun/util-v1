@@ -12,6 +12,7 @@ import android.widget.TextView;
 /**
  * Created by heaven7 on 2015/8/31.
  */
+@Deprecated
 public class DialogHelper {
 
     private AlertDialog mDialog;
