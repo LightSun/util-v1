@@ -21,10 +21,11 @@ public class HighLightHelper {
         if(i >= 0){
             StyledText st = new StyledText();
             String leftText = rawText;
-            while (i >= 0 && !TextUtils.isEmpty(leftText)){
+            do {
                 leftText = setText(st, leftText, i);
                 i = leftText.indexOf(highLightText);
-            }
+            }while (i >= 0 && !TextUtils.isEmpty(leftText));
+
             if(!TextUtils.isEmpty(leftText)){
                 st.appendForeground(leftText, defaultColor);
             }
