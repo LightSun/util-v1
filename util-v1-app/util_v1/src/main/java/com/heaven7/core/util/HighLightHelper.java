@@ -1,9 +1,10 @@
 package com.heaven7.core.util;
 
+import android.text.TextUtils;
+import android.widget.TextView;
+
 /**
- * the highlight helper
  * @author heaven7
- * @since 1.1.6
  */
 public class HighLightHelper {
 
@@ -13,23 +14,32 @@ public class HighLightHelper {
     private int highLightColor;
 
     public CharSequence getText(){
+        if(TextUtils.isEmpty(highLightText)){
+            return rawText;
+        }
         int i = rawText.indexOf(highLightText);
         if(i >= 0){
-            if(i == 0){
-                String suffix = rawText.substring(highLightText.length());
-                return new StyledText().appendForeground(highLightText, highLightColor)
-                        .appendForeground(suffix, defaultColor);
-            }else{
-                String prefix = rawText.substring(0, i);
-                String suffix = rawText.substring(i + highLightText.length());
-                return new StyledText()
-                        .appendForeground(prefix, defaultColor)
-                        .appendForeground(highLightText, highLightColor)
-                        .appendForeground(suffix, defaultColor);
+            StyledText st = new StyledText();
+            String leftText = rawText;
+            while (i >= 0 && !TextUtils.isEmpty(leftText)){
+                leftText = setText(st, leftText, i);
+                i = leftText.indexOf(highLightText);
             }
+            if(!TextUtils.isEmpty(leftText)){
+                st.appendForeground(leftText, defaultColor);
+            }
+            return st;
         }else {
             return rawText;
         }
+    }
+
+    private String setText(StyledText st, String rawText, int index) {
+        if(index > 0){
+            st.appendForeground(rawText.substring(0, index), defaultColor);
+        }
+        st.appendForeground(highLightText, highLightColor);
+        return rawText.substring(index + highLightText.length());
     }
 
     protected HighLightHelper(HighLightHelper.Builder builder) {
@@ -73,6 +83,10 @@ public class HighLightHelper {
 
         public Builder setDefaultColor(int defaultColor) {
             this.defaultColor = defaultColor;
+            return this;
+        }
+        public Builder setDefaultColorFrom(TextView tv) {
+            this.defaultColor = tv.getCurrentTextColor();
             return this;
         }
 
