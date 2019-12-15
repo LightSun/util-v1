@@ -4,9 +4,11 @@ import android.text.TextUtils;
 import android.widget.TextView;
 
 /**
+ * the high-light text helper. used to high light text as you like
  * @author heaven7
+ * @since 1.1.6
  */
-public class HighLightHelper {
+public class HighLightTextHelper {
 
     private String rawText;
     private String highLightText;
@@ -43,7 +45,7 @@ public class HighLightHelper {
         return rawText.substring(index + highLightText.length());
     }
 
-    protected HighLightHelper(HighLightHelper.Builder builder) {
+    protected HighLightTextHelper(HighLightTextHelper.Builder builder) {
         this.rawText = builder.rawText;
         this.highLightText = builder.highLightText;
         this.defaultColor = builder.defaultColor;
@@ -96,8 +98,8 @@ public class HighLightHelper {
             return this;
         }
 
-        public HighLightHelper build() {
-            return new HighLightHelper(this);
+        public HighLightTextHelper build() {
+            return new HighLightTextHelper(this);
         }
     }
 }
