@@ -1,7 +1,6 @@
 package com.heaven7.core.util;
 
 import android.text.TextUtils;
-import android.widget.TextView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
