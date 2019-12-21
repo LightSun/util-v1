@@ -281,6 +281,10 @@ public class ImageParser {
                     }
                 }
             }
+            //no rotate
+            if(orientation == 0){
+                return bitmap;
+            }
             Matrix matrix = new Matrix();
             switch (orientation){
                 case ExifInterface.ORIENTATION_ROTATE_90:
@@ -295,7 +299,7 @@ public class ImageParser {
                     matrix.postRotate(270);
                     break;
             }
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),matrix, true);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         } catch (IOException e) {
             System.out.println(Logger.toString(e));
             //ignore
