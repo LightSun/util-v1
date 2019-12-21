@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.support.annotation.GuardedBy;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
     @GuardedBy("sLock")
     private static final ArrayList<Typeface> sStorage = new ArrayList<>();
     @GuardedBy("sLock")
-    private static final ArrayMap<Typeface, Integer> sTypefaceMap = new ArrayMap<>();
+    private static final ArrayMap<Typeface, Integer> sTypefaceMap = new ArrayMap<Typeface, Integer>();
 
     /**
      * Write typeface to parcel.
