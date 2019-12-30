@@ -173,6 +173,11 @@ public class PermissionHelper {
      */
     public void onRequestPermissionsResult(final int requestCode, final String[] permissions, int[] grantResults) {
         if (mParams != null) {
+            //some phone .th first time to install app . will cause this. just request again.
+            if(grantResults.length == 0){
+                requestPermissionImpl();
+                return;
+            }
             final PermissionParam permissionParam = mParams[mCheckingIndex];
             if (permissionParam.requestCode == requestCode) {
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
