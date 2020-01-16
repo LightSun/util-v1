@@ -213,10 +213,10 @@ public class ImageParser {
             } else {
                 bitmap = tempBitmap;
             }
-            //if need to check the exif info.
-            if(mCheckExif){
-                bitmap = doExif(decoder, param, bitmap);
-            }
+        }
+        //if need to check the exif info.
+        if(mCheckExif){
+            bitmap = doExif(decoder, param, bitmap);
         }
         return bitmap;
     }
