@@ -14,7 +14,6 @@ import android.text.style.MetricAffectingSpan;
 public class ExpandMeasurableSpan extends MetricAffectingSpan implements Parcelable {
 
     private boolean bold;
-    private boolean underline;
     private boolean italic;
     private boolean strikeThru; //'delete-line'
     private boolean subscript;
@@ -37,9 +36,6 @@ public class ExpandMeasurableSpan extends MetricAffectingSpan implements Parcela
         }
         if(bold){
             ds.setFakeBoldText(true);
-        }
-        if(underline){
-            ds.setUnderlineText(true);
         }
         if(italic){
             ds.setTextSkewX(-0.25f);
@@ -93,7 +89,6 @@ public class ExpandMeasurableSpan extends MetricAffectingSpan implements Parcela
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte(this.bold ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.underline ? (byte) 1 : (byte) 0);
         dest.writeByte(this.italic ? (byte) 1 : (byte) 0);
         dest.writeByte(this.strikeThru ? (byte) 1 : (byte) 0);
         dest.writeByte(this.subscript ? (byte) 1 : (byte) 0);
@@ -108,7 +103,6 @@ public class ExpandMeasurableSpan extends MetricAffectingSpan implements Parcela
     }
     protected ExpandMeasurableSpan(Parcel in) {
         this.bold = in.readByte() != 0;
-        this.underline = in.readByte() != 0;
         this.italic = in.readByte() != 0;
         this.strikeThru = in.readByte() != 0;
         this.subscript = in.readByte() != 0;
@@ -131,4 +125,113 @@ public class ExpandMeasurableSpan extends MetricAffectingSpan implements Parcela
             return new ExpandMeasurableSpan[size];
         }
     };
+
+    protected ExpandMeasurableSpan(ExpandMeasurableSpan.Builder builder) {
+        this.bold = builder.bold;
+        this.italic = builder.italic;
+        this.strikeThru = builder.strikeThru;
+        this.subscript = builder.subscript;
+        this.superscript = builder.superscript;
+        this.textSize = builder.textSize;
+        this.mFamily = builder.mFamily;
+        this.mTypeface = builder.mTypeface;
+        this.mProportion = builder.mProportion;
+    }
+
+    public boolean isBold() {
+        return this.bold;
+    }
+
+    public boolean isItalic() {
+        return this.italic;
+    }
+
+    public boolean isStrikeThru() {
+        return this.strikeThru;
+    }
+
+    public boolean isSubscript() {
+        return this.subscript;
+    }
+
+    public boolean isSuperscript() {
+        return this.superscript;
+    }
+
+    public int getTextSize() {
+        return this.textSize;
+    }
+
+    public String getFamily() {
+        return this.mFamily;
+    }
+
+    public Typeface getTypeface() {
+        return this.mTypeface;
+    }
+
+    public float getProportion() {
+        return this.mProportion;
+    }
+
+    public static class Builder {
+        private boolean bold;
+        private boolean italic;
+        private boolean strikeThru; //'delete-line'
+        private boolean subscript;
+        private boolean superscript;
+        private int textSize;  //in pix
+        private String mFamily;
+        private Typeface mTypeface;
+        private float mProportion;
+
+        public Builder setBold(boolean bold) {
+            this.bold = bold;
+            return this;
+        }
+
+        public Builder setItalic(boolean italic) {
+            this.italic = italic;
+            return this;
+        }
+
+        public Builder setStrikeThru(boolean strikeThru) {
+            this.strikeThru = strikeThru;
+            return this;
+        }
+
+        public Builder setSubscript(boolean subscript) {
+            this.subscript = subscript;
+            return this;
+        }
+
+        public Builder setSuperscript(boolean superscript) {
+            this.superscript = superscript;
+            return this;
+        }
+
+        public Builder setTextSize(int textSize) {
+            this.textSize = textSize;
+            return this;
+        }
+
+        public Builder setFamily(String mFamily) {
+            this.mFamily = mFamily;
+            return this;
+        }
+
+        public Builder setTypeface(Typeface mTypeface) {
+            this.mTypeface = mTypeface;
+            return this;
+        }
+
+        public Builder setProportion(float mProportion) {
+            this.mProportion = mProportion;
+            return this;
+        }
+
+        public ExpandMeasurableSpan build() {
+            return new ExpandMeasurableSpan(this);
+        }
+    }
 }

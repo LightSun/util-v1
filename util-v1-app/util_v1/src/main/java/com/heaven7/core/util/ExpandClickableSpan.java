@@ -12,6 +12,7 @@ public class ExpandClickableSpan extends ClickableSpan{
     private int textColor; //foreground color
     private int backgroundColor;
     private int linkColor;
+    private boolean underline;
 
     private CharSequence text;
     private OnTextClickListener mClickListener;
@@ -20,6 +21,7 @@ public class ExpandClickableSpan extends ClickableSpan{
         this.textColor = builder.textColor;
         this.backgroundColor = builder.backgroundColor;
         this.linkColor = builder.linkColor;
+        this.underline = builder.underline;
         this.text = builder.text;
         this.mClickListener = builder.mClickListener;
     }
@@ -41,6 +43,9 @@ public class ExpandClickableSpan extends ClickableSpan{
         if(linkColor != 0){
             ds.linkColor = linkColor;
         }
+        if(underline){
+            ds.setUnderlineText(true);
+        }
     }
     public interface OnTextClickListener{
         void onClickText(View view, CharSequence text);
@@ -58,6 +63,10 @@ public class ExpandClickableSpan extends ClickableSpan{
         return this.linkColor;
     }
 
+    public boolean isUnderline() {
+        return this.underline;
+    }
+
     public CharSequence getText() {
         return this.text;
     }
@@ -70,6 +79,7 @@ public class ExpandClickableSpan extends ClickableSpan{
         private int textColor; //foreground color
         private int backgroundColor;
         private int linkColor;
+        private boolean underline;
         private CharSequence text;
         private OnTextClickListener mClickListener;
 
@@ -85,6 +95,11 @@ public class ExpandClickableSpan extends ClickableSpan{
 
         public Builder setLinkColor(int linkColor) {
             this.linkColor = linkColor;
+            return this;
+        }
+
+        public Builder setUnderline(boolean underline) {
+            this.underline = underline;
             return this;
         }
 
