@@ -16,7 +16,7 @@ import android.view.WindowManager;
  * Created by heaven7 on 2017/5/8 0008.
  * @since 1.1.3
  */
-
+@Deprecated
 public final class Toast {
 
     private static final int TOAST_SHOW_LENGTH = 2000;

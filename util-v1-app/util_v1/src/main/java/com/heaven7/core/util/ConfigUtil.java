@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-public class ConfigUtil {
+public final class ConfigUtil {
 
 	public static Properties loadAssetsConfig(Context context, String filename){
 		try {

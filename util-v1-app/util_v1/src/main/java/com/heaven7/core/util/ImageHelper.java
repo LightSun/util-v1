@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
  * @author heaven7
  * @since 1.1.3
  */
-public class ImageHelper {
+public final class ImageHelper {
 
     private static final String TAG = "ImageHelper";
     private static final int NONE          = 0;

@@ -24,7 +24,7 @@ import android.support.annotation.ColorRes;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
-public class ViewCompatUtil {
+public final class ViewCompatUtil {
 
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")

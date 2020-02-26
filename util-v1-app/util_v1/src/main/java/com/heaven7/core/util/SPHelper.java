@@ -10,11 +10,10 @@ import java.util.Map;
  * use {@link SPEditor}
  * @author chenjun
  */
-public class SPHelper {
+public final class SPHelper {
 	
 	private static final String FILENAME="heaven_framework.db";
 	
-	// ============= 兼容旧的  ================//
 	public static void putValue(Context context, String key, Boolean value){
 		putBoolean(context, key, value);
 	}
@@ -42,6 +41,12 @@ public class SPHelper {
 	}
 	public static void putLong(Context context, String key,long value){
 		getSp(context).edit().putLong(key, value).apply();
+	}
+	public static void putInt(Context context, String key,int value){
+		getSp(context).edit().putInt(key, value).apply();
+	}
+	public static void putFloat(Context context, String key,float value){
+		getSp(context).edit().putFloat(key, value).apply();
 	}
 	// =========== begin  multi progress =================== //
 	public static String getStringByMulti(Context context,String key,String defValue){

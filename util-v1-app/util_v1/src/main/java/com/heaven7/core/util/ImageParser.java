@@ -18,7 +18,7 @@ import java.io.IOException;
 /**
  * Created by heaven7 on 2015/9/15.
  */
-public class ImageParser {
+public final class ImageParser {
 
     /**
      * the callback of parse image
