@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -24,12 +26,16 @@ public final class PluginReceiver extends BroadcastReceiver {
         final IReceiverPluginManager acm;
         try {
             Class<?> clazz = Class.forName(cn);
-            acm = (IReceiverPluginManager) clazz.newInstance();
+            Method get = clazz.getMethod("get", Context.class);
+            acm = (IReceiverPluginManager) get.invoke(null, context);
         } catch (ClassNotFoundException e) {
             System.err.println("can't find IReceiverPluginManager for classname = " + cn);
             return;
-        } catch (IllegalAccessException|InstantiationException|ClassCastException  e) {
-            System.err.println("can't create IReceiverPluginManager for classname = " + cn);
+        } catch (NoSuchMethodException e) {
+            System.err.println("couldn't find 'get' method to get an instance of IReceiverPluginManager for classname = " + cn);
+            return;
+        } catch (IllegalAccessException | ClassCastException | InvocationTargetException e) {
+            System.err.println("couldn't invoke 'get' method to get an instance of IReceiverPluginManager for classname = " + cn);
             return;
         }
         List<IReceiverPlugin> plugins = acm.getPlugins();
