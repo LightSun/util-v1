@@ -2,7 +2,6 @@ package com.heaven7.core.util;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,11 +67,6 @@ public final class BundleHelper {
 
     public Bundle getBundle(){
         return b;
-    }
-
-    public <T extends Fragment>T into(T fragment){
-        fragment.setArguments(getBundle());
-        return fragment;
     }
     public <T extends android.app.Fragment>T into(T fragment){
         fragment.setArguments(getBundle());

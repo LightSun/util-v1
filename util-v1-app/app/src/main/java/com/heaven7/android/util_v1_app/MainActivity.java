@@ -1,9 +1,10 @@
 package com.heaven7.android.util_v1_app;
 
 import android.Manifest;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.heaven7.core.util.Logger;
 import com.heaven7.core.util.PermissionHelper;
