@@ -8,13 +8,45 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public final class PackageUtil {
 
+    /**
+     * activate install apk
+     * @param context the context
+     * @param file the file
+     * @param uri the uri
+     * @since 1.1.7
+     */
+    public static void activateInstallApk(Context context, File file, Uri uri) {
+        setPermission(file.getAbsolutePath());
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 24) {
+           // Uri apkUri = FileProvider.getUriForFile(context, "com.lxtwsw.weather.fileprovider", file);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
+
+    private static void setPermission(String absolutePath) {
+        String command = "chmod " + "777" + " " + absolutePath;
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            runtime.exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @Deprecated
     public static void activateInstallApk(Context context, File file) {
 
         Intent intent = new Intent();
@@ -26,9 +58,8 @@ public final class PackageUtil {
 
         context.startActivity(intent);
     }
-
+    @Deprecated
     public static void activateInstallApk(Context context, String uri) {
-
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
