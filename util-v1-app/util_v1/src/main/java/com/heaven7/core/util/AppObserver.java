@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -47,7 +48,9 @@ public final class AppObserver implements Application.ActivityLifecycleCallbacks
     public void addCallback(Callback callback, boolean oneShot) {
         mItems.add(new Item(callback, oneShot));
     }
-
+    public void removeCallback(Callback callback){
+        mItems.remove(new Item(callback, true));
+    }
     public void register(Context context){
         Application app = (Application) context.getApplicationContext();
         app.registerActivityLifecycleCallbacks(this);
@@ -56,6 +59,7 @@ public final class AppObserver implements Application.ActivityLifecycleCallbacks
         Application app = (Application) context.getApplicationContext();
         app.unregisterActivityLifecycleCallbacks(this);
     }
+    //======================================================================
 
     public void onActivityCreated(Activity activity, Bundle savedInstanceState){
 
@@ -116,6 +120,17 @@ public final class AppObserver implements Application.ActivityLifecycleCallbacks
         Item(Callback callback, boolean oneShot) {
             this.callback = callback;
             this.oneShot = oneShot;
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Item item = (Item) o;
+            return Objects.equals(callback, item.callback);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(callback);
         }
     }
 }
