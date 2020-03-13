@@ -1,5 +1,6 @@
 package com.heaven7.core.util;
 
+import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -30,4 +31,13 @@ public abstract class WeakHandler<T> extends Handler {
         return mWeakRef.get();
     }
 
+    /**
+     * post a task which can control by signal.
+     * @param r the task
+     * @param signal the signal
+     * @since 1.1.7
+     */
+    public void post(Runnable r, CancellationSignal signal){
+        post(new CancellationSignalTask(r, signal));
+    }
 }

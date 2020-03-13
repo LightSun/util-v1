@@ -16,21 +16,36 @@
  */
 package com.heaven7.core.util;
 
+import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Looper;
 
 /**the all post runnables will run on main thread.
  * @author heaven7
  */
-public class MainWorker {
+public final class MainWorker {
 
     public static final Handler MainHandler = new Handler(Looper.getMainLooper());
 	
 	public static void post(Runnable r){
+		post(r, null);
+	}
+
+	/**
+	 * post a task which can control by target signal.
+	 * @param r the real task
+	 * @param signal the signal
+	 * @since 1.1.7
+	 */
+	public static void post(Runnable r, CancellationSignal signal){
 		if(currentIsMainThread()){
 			r.run();
 		}else{
-			MainHandler.post(r);
+			if(signal == null){
+				MainHandler.post(r);
+			}else {
+				MainHandler.post(new CancellationSignalTask(r, signal));
+			}
 		}
 	}
 	public static void postAtfront(Runnable r){
