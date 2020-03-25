@@ -35,7 +35,7 @@ public final class AppObserver implements Application.ActivityLifecycleCallbacks
 
     private static AppObserver INSTANCE;
 
-    public static AppObserver get(){
+    public static synchronized AppObserver get(){
         if(INSTANCE == null){
             INSTANCE = new AppObserver();
         }
