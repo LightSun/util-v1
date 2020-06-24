@@ -22,5 +22,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':util_v1')
+    //implementation project(':util_v1')
+    implementation ("com.github.LightSun:SuperAdapter:2.1.1-x"){
+        //exclude module: "util_v1"
+    }
 }
