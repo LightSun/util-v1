@@ -121,18 +121,23 @@ public final class PermissionHelper {
      */
     protected void requestPermissionImpl() {
         final Activity activity = this.mActivity;
-        final PermissionParam permissionParam = mParams[mCheckingIndex];
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final PermissionParam permissionParam = mParams[mCheckingIndex];
 
-        if (ContextCompat.checkSelfPermission(activity, permissionParam.requestPermission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{permissionParam.requestPermission}, permissionParam.requestCode);
-        } else {
-            if (Build.VERSION.SDK_INT < 23 || permissionParam.verifier == null) {
-                checkNext(permissionParam, true);
-            } else {
-                //check third app intercept
-                checkNext(permissionParam, permissionParam.verifier.verify(permissionParam.params));
+                if (ContextCompat.checkSelfPermission(activity, permissionParam.requestPermission) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{permissionParam.requestPermission}, permissionParam.requestCode);
+                } else {
+                    if (Build.VERSION.SDK_INT < 23 || permissionParam.verifier == null) {
+                        checkNext(permissionParam, true);
+                    } else {
+                        //check third app intercept
+                        checkNext(permissionParam, permissionParam.verifier.verify(permissionParam.params));
+                    }
+                }
             }
-        }
+        });
     }
 
     /**
