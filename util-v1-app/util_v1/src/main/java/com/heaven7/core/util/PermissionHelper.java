@@ -86,7 +86,7 @@ public final class PermissionHelper {
     /**
      * begin request the permission group
      *
-     * @param permission  the permissionto request and must in order
+     * @param permission  the permission request and must in order
      * @param requestCode the request codes , but must in order and  match the requestPermissions
      * @param callback    the callback
      */
@@ -180,13 +180,10 @@ public final class PermissionHelper {
     public void onRequestPermissionsResult(final int requestCode, final String[] permissions, int[] grantResults) {
         if (mParams != null) {
             //some phone .th first time to install app . will cause this. just request again.
-            if(grantResults.length == 0){
-                requestPermissionImpl();
-                return;
-            }
+            final boolean refused = grantResults.length == 0;
             final PermissionParam permissionParam = mParams[mCheckingIndex];
             if (permissionParam.requestCode == requestCode) {
-                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                if (refused || grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     //have refuse then
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permissionParam.requestPermission)
                             && mCallback.handlePermissionHadRefused(permissionParam.requestPermission, requestCode, new Runnable() {
