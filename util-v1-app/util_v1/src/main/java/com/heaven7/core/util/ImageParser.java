@@ -84,7 +84,7 @@ public final class ImageParser {
             this.resources = resources;
         }
     }
-    private static final IDecoder sPathDecoder = new IDecoder() {
+    public static final IDecoder sPathDecoder = new IDecoder() {
         @Override
         public Bitmap decode(DecodeParam param, BitmapFactory.Options options) {
             return BitmapFactory.decodeFile(param.pathName,options);
@@ -96,7 +96,7 @@ public final class ImageParser {
         }
     };
     // if check exif. this need sd-permission
-    private static final IDecoder sResourceDecoder = new IDecoder() {
+    public static final IDecoder sResourceDecoder = new IDecoder() {
         @Override
         public Bitmap decode(DecodeParam param, BitmapFactory.Options options) {
             return BitmapFactory.decodeResource(param.resources, param.resId, options);
@@ -106,7 +106,7 @@ public final class ImageParser {
             return -1;
         }
     };
-    private static final IDecoder sByteArrayDecoder = new IDecoder() {
+    public static final IDecoder sByteArrayDecoder = new IDecoder() {
         @Override
         public Bitmap decode(DecodeParam param, BitmapFactory.Options options) {
             final byte[] bytes = param.imageArray;
@@ -184,7 +184,7 @@ public final class ImageParser {
      * @param param the decode param
      * @param outInfo the out sample size and rotate info
      * @return the bitmap
-     * @since 1.1.8
+     * @since 1.1.9
      */
     public Bitmap decodeToBitmap(IDecoder decoder, DecodeParam param, float[] outInfo){
         BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
@@ -251,6 +251,21 @@ public final class ImageParser {
     }
 
     /**
+     * parse image file to bitmap
+     * @param pathName the image file path
+     * @param outInfo out sampleSize and rotate info, can be null. length must be 2
+     * @return the bitmap
+     * @since 1.1.9
+     */
+    public Bitmap parseToBitmap(String pathName, float[] outInfo){
+        File file = new File(pathName);
+        if (!file.exists()) {
+            return null;
+        }
+        return decodeToBitmap(sPathDecoder, new DecodeParam(pathName));
+    }
+
+    /**
      * parse image data to bitmap
      * @param data the data
      * @return the bitmap
@@ -258,7 +273,16 @@ public final class ImageParser {
     public Bitmap parseToBitmap(byte[] data){
         return decodeToBitmap(sByteArrayDecoder,new DecodeParam(data));
     }
-
+    /**
+     * parse image data to bitmap
+     * @param data the data
+     * @param outInfo out sampleSize and rotate info, can be null. length must be 2
+     * @return the bitmap
+     * @since 1.1.9
+     */
+    public Bitmap parseToBitmap(byte[] data, float[] outInfo){
+        return decodeToBitmap(sByteArrayDecoder,new DecodeParam(data));
+    }
     /**
      * parse resource id to bitmap
      * @param context the context
@@ -266,6 +290,17 @@ public final class ImageParser {
      * @return the bitmap
      */
     public Bitmap parseToBitmap(Context context, int resId){
+        return decodeToBitmap(sResourceDecoder,new DecodeParam(context.getResources(),resId));
+    }
+    /**
+     * parse resource id to bitmap
+     * @param context the context
+     * @param resId the image resource id
+     * @param outInfo out sampleSize and rotate info, can be null. length must be 2
+     * @return the bitmap
+     * @since 1.1.9
+     */
+    public Bitmap parseToBitmap(Context context, int resId, float[] outInfo){
         return decodeToBitmap(sResourceDecoder,new DecodeParam(context.getResources(),resId));
     }
     private static Bitmap doExif(IDecoder decoder, DecodeParam param, Bitmap bitmap, float[] outInfo) {
