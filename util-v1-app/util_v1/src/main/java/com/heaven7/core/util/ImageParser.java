@@ -166,15 +166,27 @@ public final class ImageParser {
         }
         this.mCallback = mCallback;
     }
-
     /**
      * decode to bitmap
      * @param decoder the decoder
+     * @param param the decode param
      * @param param the decode param
      * @return the bitmap
      * @since 1.1.5
      */
     public Bitmap decodeToBitmap(IDecoder decoder, DecodeParam param){
+        return decodeToBitmap(decoder, param, null);
+    }
+    /**
+     * decode to bitmap
+     * @param decoder the decoder
+     * @param param the decode param
+     * @param param the decode param
+     * @param outInfo the out sample size and rotate info
+     * @return the bitmap
+     * @since 1.1.8
+     */
+    public Bitmap decodeToBitmap(IDecoder decoder, DecodeParam param, float[] outInfo){
         BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
         Bitmap bitmap;
         if (mMaxWidth == 0 && mMaxHeight == 0) {
@@ -201,6 +213,9 @@ public final class ImageParser {
             // TODO(ficus): Do we need this or is it okay since API 8 doesn't support it?
             // decodeOptions.inPreferQualityOverSpeed = PREFER_QUALITY_OVER_SPEED;
             decodeOptions.inSampleSize = mCallback.findBestSampleSize(actualWidth, actualHeight, desiredWidth, desiredHeight);
+            if(outInfo != null){
+                outInfo[0] = decodeOptions.inSampleSize;
+            }
             Bitmap tempBitmap;
             synchronized (sDecodeLock) {
                 tempBitmap = decoder.decode(param, decodeOptions);
@@ -217,7 +232,7 @@ public final class ImageParser {
         }
         //if need to check the exif info.
         if(mCheckExif){
-            bitmap = doExif(decoder, param, bitmap);
+            bitmap = doExif(decoder, param, bitmap, outInfo);
         }
         return bitmap;
     }
@@ -253,7 +268,7 @@ public final class ImageParser {
     public Bitmap parseToBitmap(Context context, int resId){
         return decodeToBitmap(sResourceDecoder,new DecodeParam(context.getResources(),resId));
     }
-    private static Bitmap doExif(IDecoder decoder, DecodeParam param, Bitmap bitmap) {
+    private static Bitmap doExif(IDecoder decoder, DecodeParam param, Bitmap bitmap, float[] outInfo) {
         try {
             int orientation = decoder.getOrientation(param);
             if(orientation < 0){
@@ -281,6 +296,9 @@ public final class ImageParser {
                         target.delete();
                     }
                 }
+            }
+            if(outInfo != null){
+                outInfo[1] = orientation;
             }
             //no rotate
             if(orientation == 0){
