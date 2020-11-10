@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Environment;
@@ -223,9 +224,25 @@ public final class ImageParser {
             // If necessary, scale down to the maximal acceptable size.
             if (tempBitmap != null && (tempBitmap.getWidth() > desiredWidth ||
                     tempBitmap.getHeight() > desiredHeight)) {
-                bitmap = Bitmap.createScaledBitmap(tempBitmap,
-                        desiredWidth, desiredHeight, true);
-                tempBitmap.recycle();
+                float sx = desiredWidth > 0 ? desiredWidth * 1f / tempBitmap.getWidth() : 1;
+                float sy = desiredHeight > 0 ? desiredHeight * 1f / tempBitmap.getHeight() : 1;
+                //if not equal scale.
+                if(sx != sy){
+                    //for this out-info. scale may be wrong.
+                    bitmap = Bitmap.createScaledBitmap(tempBitmap, desiredWidth, desiredHeight, true);
+                    tempBitmap.recycle();
+                }else {
+                    Matrix mat = new Matrix();
+                    mat.postScale(sx, sx);
+
+                    Bitmap bg = Bitmap.createBitmap(desiredWidth, desiredHeight, tempBitmap.getConfig());
+                    Canvas canvas = new Canvas(bg);
+                    canvas.drawBitmap(tempBitmap, mat, null);
+                    if(outInfo != null){
+                        outInfo[0] /= sx;
+                    }
+                    return bg;
+                }
             } else {
                 bitmap = tempBitmap;
             }
